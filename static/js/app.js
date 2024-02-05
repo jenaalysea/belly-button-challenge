@@ -1,31 +1,25 @@
-const bellyButtonData = "https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json";
+function buildCharts(sample) {
+  d3.json("https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json").then((data) => {
 
-// Fetch the JSON data and console log it
-d3.json(bellyButtonData).then(function(data) {
-  // Sort the data in descending order based on idSearchResults
-  console.log(data);
-  });
 
-  //   // Get the top ten results
-  // const topTen = data.filter(topten).slice(0, 10);
+// step 1, get metadata from data
+let samp = data.Id.filter(ID => ID.id == otuId)[0];;
+// step 2, filter
+let otuCount = data.otuCounts.filter(otuId => otuId.id == otuId)[0];
+// step 3, get the first result from the results array
+let result = otuCount.otuId_values.slice(0, 10);
 
-  // Sort searchResults by OtuId in descending order
-  let sortedById = searchResults.sort((a, b) => b.ID - a.ID);
-  
-  console.log(sortedById)
-  let slicedData = sortedById.slice(0, 10);
 
-  // Reverse the array to accommodate Plotly's defaults
-  slicedData.reverse();
-  
+ 
   // Trace1 for the OTU Data
   let trace1 = {
-    x: slicedData.map(object => object.IdSearchResults),
-    y: slicedData.map(object => object.OtuId),
+    x: result.map(object => object.IdSearchResults),
+    y: result.map(object => object.otuId),
+    text: result.map(object => `${object.otuId}, ${object.IdSearchResults}`),
     textposition: 'auto',
     name: "OTU Data",
     type: "bar",
-    hoverinfo:'none',
+    hoverinfo: 'none',
     orientation: "h"
   };
   
@@ -44,5 +38,6 @@ d3.json(bellyButtonData).then(function(data) {
   };
   
   // Render the plot to the div tag with id "plot"
-  Plotly.newPlot("plot", data, layout);
-
+  Plotly.newPlot("plot", plotlyData, layout);
+  });
+}

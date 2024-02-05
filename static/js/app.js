@@ -3,41 +3,37 @@ function buildCharts(sample) {
 
 
 // step 1, get metadata from data
-let samp = data.Id.filter(ID => ID.id == otuId)[0];;
+var metadata = data.metadata.find(entry => entry.id == sample);
+
 // step 2, filter
-let otuCount = data.otuCounts.filter(otuId => otuId.id == otuId)[0];
+var otuCounts = data.samples.find(entry => entry.id == sample);
+
 // step 3, get the first result from the results array
-let result = otuCount.otuId_values.slice(0, 10);
+var result = otuCounts.otu_values.slice(0, 10);
 
 //******************************creating the vertical bar chart***********************************************
  
   // Trace1 for the OTU Data
-  let trace1 = {
-    x: result.map(object => object.ID),
-    y: result.map(object => object.otuId),
-    textposition: 'auto',
-    name: "OTU Top Ten",
+  var trace1 = {
+    x: result,
+    y: otuCounts.otu_ids.slice(0, 10).map(id => `OTU ${id}`),
+    text: otuCounts.otu_labels.slice(0, 10),
     type: "bar",
-    hoverinfo: 'otu_labels',
     orientation: "h"
   };
   
   // Data array
-  let plotlyData = [trace1];
+  var barData = [trace1];
   
   // Apply a title to the layout
-  let layout = {
-    title: "OTU Top 10",
-    margin: {
-      l: 100,
-      r: 100,
-      t: 100,
-      b: 100
-    }
+  var barLayout = {
+    title: `Top 10 OTUs for Sample ${sample}`,
+    xaxis: { title: "OTU Count" },
+    yaxis: { title: "OTU ID" }
   };
   
   // Render the plot to the div tag with id "plot"
-  Plotly.newPlot("plot", plotlyData, layout);
+  Plotly.newPlot("bar", barData, barLayout);
   });
 }
 
@@ -46,30 +42,29 @@ let result = otuCount.otuId_values.slice(0, 10);
 function buildCharts(sample) {
   d3.json("https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json").then((data) => {
 
-    // step 1, get metadata from data
-    var samp = data.Id.filter(ID => ID.id == otuId)[0];
-    // step 2, filter
-    var otuCount = data.otuCounts.filter(otuId => otuId.id == otuId)[0];
+// step 1, get metadata from data
+var sample_values = data.metadata.find(entry => entry.id == sample);
+// step 2, filter
+var otuCounts = data.samples.find(entry => entry.id == sample);
     
 
     // Trace1 for the OTU Data (Bubble Chart)
-    let trace1 = {
+    var trace1 = {
       x: result.map(object => object.ID),
       y: result.map(object => object.otuId),
-      text: result.map(object => object.otu_labels),
       mode: 'markers',
       marker: {
+        color: 'Viridis',
+        opacity: [1, 0.8, 0.6, 0.4],
         size: result.map(object => object.sample_values),
-        color: result.map(object => object.otuId),
-        colorscale: 'Viridis'
       },
-    };
+    };  
 
     // Data array
-    let plotlyData = [trace1];
+    var data = [trace1];
 
     // Apply a title to the layout
-    let layout = {
+    var layout = {
       title: "OTU Bubble Chart",
       xaxis: {
         title: 'OTU ID'
@@ -130,5 +125,46 @@ function updateDemographicInfo(metadata) {
 // Initialize the page
 init();
 
-// ***********************create a view of sample data**************************************
+// ***********************create the gauge chart**************************************
+/* <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
+// Function to generate the gauge chart
+function updateGaugeChart(wfreq) {
+  // Gauge chart configuration
+  const gaugeData = [
+    {
+      domain: { x: [0, 1], y: [0, 1] },
+      value: wfreq,
+      title: { text: 'Weekly Washing Frequency' },
+      type: 'indicator',
+      mode: 'gauge+number',
+      gauge: {
+        axis: { range: [null, 9] },
+        steps: [
+          { range: [0, 3], color: 'lightgreen' },
+          { range: [3, 6], color: 'yellow' },
+          { range: [6, 9], color: 'red' },
+        ],
+      },
+    },
+  ];
+
+  // Layout for the gauge chart
+  const gaugeLayout = { margin: { t: 0, b: 0 } };
+
+  // Render the gauge chart
+  Plotly.newPlot('gauge', gaugeData, gaugeLayout);
+}
+
+function optionChanged(selectedId) {
+  d3.json("your_data_url").then((data) => {
+    const metadata = data.metadata.find((entry) => entry.id == selectedId);
+
+    // Update demographic information
+    updateDemographicInfo(metadata);
+
+    // Update gauge chart
+    function updateGaugeChart(wfreq) {
+      console.log('Updating Gauge Chart with wfreq:', wfreq);    
+  });
+} */

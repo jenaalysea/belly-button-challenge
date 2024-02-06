@@ -1,7 +1,8 @@
-function buildCharts(sample) {
-  // Grab a reference to the dropdown select "ID" from the sample data
 
-d3.json("https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json").then((data) => {
+  // Grab a reference to the dropdown select "ID" from the sample data
+function buildCharts(sample) {
+
+  d3.json("https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json").then((data) => {
 
     // Get metadata description for the selected sample
     var metadata = data.metadata.find(entry => entry.id == sample);
@@ -30,6 +31,8 @@ d3.json("https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1
 
     // Render the bar chart to the div tag with id "bar"
     Plotly.newPlot("bar", barData, barLayout);
+
+  
 
     //*********************************create bubble chart*************************************************
 
@@ -61,5 +64,19 @@ d3.json("https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1
   });
 }
 
+  // Function called 
+function getData() {
+  let dropdownMenu = d3.select("#selDataset");
+      // Assign the value of the dropdown menu option to a letiable
+  let dataset = dropdownMenu.property("value");
+      // Loop through the data by linking in the data listed above
+  buildCharts(dataset);
+}
+
+
+d3.selectAll("#selDataset").on("change", getData);
+
+
+    
+
 //*******************************************create drop down*************************************************
-  

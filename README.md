@@ -14,6 +14,8 @@
 https://plotly.com/javascript/
 https://plotly.com/javascript/bar-charts/; Copyright © 2024 Plotly. All rights reserved.
 https://plotly.com/javascript/bubble-charts/#marker-size-color-and-symbol-as-an-array; Copyright © 2024 Plotly. All rights reserved.
+https://www.w3schools.com/js/js_json_files.asp Copyright 1999-2024 by Refsnes Data. All Rights Reserved. W3Schools is Powered by W3.CSS.
+
 
 14 - Interactive-Visualizations
     02-Stu_JavaScript-Variables_and_Data_Structures

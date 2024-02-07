@@ -9,7 +9,7 @@ function buildCharts(sample) {
     // Get sample data numbers for the selected sample
     var otuCounts = data.samples.find(entry => entry.id == sample);
     // Get the first 10 results from the sorted otu_values array
-    var result = otuCounts.otu_values.slice(0, 10);
+    var result = otuCounts.sample_values.slice(0, 10).sort((a, b) => a - b);
 
     //*********************************create bar chart*************************************************
     
@@ -78,5 +78,49 @@ d3.selectAll("#selDataset").on("change", getData);
 
 
     
-
+buildCharts(940)
 //*******************************************create drop down*************************************************
+
+// Function to populate dropdown
+function populateDropdown() {
+  d3.json("https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json").then((data) => {
+    var dropdownMenu = d3.select("#selDataset");
+    data.names.forEach((sample) => {
+      dropdownMenu.append("option").text(sample).property("value", sample);
+    });
+  });
+}
+
+// Function to update demographic info
+function updateDemographicInfo(sample) {
+  d3.json("https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json").then((data) => {
+    var metadata = data.metadata.find(entry => entry.id == sample);
+    var metadataPanel = d3.select("#sample-metadata");
+    metadataPanel.html("");
+    Object.entries(metadata).forEach(([key, value]) => {
+      metadataPanel.append("p").text(`${key}: ${value}`);
+    });
+  });
+}
+
+// Function called when dropdown option changes
+function optionChanged(sample) {
+  buildCharts(sample);
+  updateDemographicInfo(sample);
+}
+
+// Function called to initialize the webpage
+function init() {
+  populateDropdown();
+  buildCharts("940"); // Default sample ID
+  updateDemographicInfo("940"); // Default sample ID
+}
+
+// Call the init function to initialize the webpage
+init();
+
+// Event listener for dropdown change
+d3.selectAll("#selDataset").on("change", function() {
+  var selectedSample = d3.select(this).property("value");
+  optionChanged(selectedSample);
+});
